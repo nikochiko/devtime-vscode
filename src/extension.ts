@@ -1,12 +1,13 @@
 import * as vscode from "vscode";
 
-import { configureApiUrl, initialize, login, resetConfig, showConfig } from "./devtime";
+import { Devtime } from "./devtime";
 
 export async function activate(context: vscode.ExtensionContext) {
+  const devtime = new Devtime();
   console.log("DevTime is now active!");
 
-	await initialize();
-	console.log('Initialization complete!');
+  await devtime.initialize();
+  console.log("Initialization complete!");
 
   let ping = vscode.commands.registerCommand("devtime.ping", () => {
     vscode.window.showInformationMessage("pong!");
@@ -14,27 +15,30 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(ping);
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("devtime.login", login)
+    vscode.commands.registerCommand("devtime.login", devtime.login)
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("devtime.showConfig", showConfig)
+    vscode.commands.registerCommand("devtime.showConfig", devtime.showConfig)
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("devtime.resetConfig", resetConfig)
+    vscode.commands.registerCommand("devtime.resetConfig", devtime.resetConfig)
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("devtime.setup", initialize)
+    vscode.commands.registerCommand("devtime.setup", devtime.initialize)
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("devtime.configureApiUrl", configureApiUrl)
+    vscode.commands.registerCommand(
+      "devtime.configureApiUrl",
+      devtime.configureApiUrl
+    )
   );
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() {
-	console.log('DevTime disabled now!');
+  console.log("DevTime disabled now!");
 }

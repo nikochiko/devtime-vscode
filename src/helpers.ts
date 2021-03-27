@@ -7,6 +7,7 @@ import fetch from "node-fetch";
 const configFileName = ".devtime.json";
 const defaultConfig = JSON.stringify({
   apiUrl: "https://devtime.tech/api/heartbeats",
+  client: "vscode",
 });
 
 function getBaseDir(): string {
@@ -49,33 +50,39 @@ export function isAuthenticated(): boolean {
   return "apiKey" in getConfig();
 }
 
-export function sendHeartbeat(language: string | undefined): void {
-  let url: string = getConfig().apiUrl;
+export function sendHeartbeat(
+  language: string | undefined,
+  timestamp: number | undefined
+): void {
+  let config: Record<string, any> = getConfig();
 
   let body = {
     language: language || null,
-    recorded_at: new Date(Date.now()).toISOString(),
+    recorded_at: new Date(timestamp || Date.now()).toISOString(),
+    client: config.client,
   };
-  fetch(url, {
+  fetch(config.apiUrl, {
     method: "POST",
-    headers: { 'X-API-KEY': getConfig().apiKey, 'Content-Type': 'application/json' },
+    headers: {
+      "X-API-KEY": config.apiKey,
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(body),
   })
-  .then(response => {
-    if (response.ok) {
-      console.log('Heartbeat sent successfully!');
-    } else {
-      response.text()
-        .then(body => console.error(`Unable to send heartbeat. Status: ${response.status}. Response: ${body}`));
-    }
-  })
-  .catch(reason => {
-    console.log(JSON.stringify(reason));
-  });
-}
-
-export function setApiUrl(url: string): void {
-  let config = getConfig();
-  config['apiUrl'] = url;
-  writeConfig(config);
+    .then((response) => {
+      if (response.ok) {
+        console.log("Heartbeat sent successfully!");
+      } else {
+        response
+          .text()
+          .then((body) =>
+            console.error(
+              `Unable to send heartbeat. Status: ${response.status}. Response: ${body}`
+            )
+          );
+      }
+    })
+    .catch((reason) => {
+      console.log(JSON.stringify(reason));
+    });
 }
