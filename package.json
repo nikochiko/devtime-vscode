@@ -1,8 +1,13 @@
 {
 	"name": "devtime",
 	"displayName": "DevTime",
-	"description": "Code-time metrics for developers",
-	"version": "0.0.1",
+	"description": "Modern watch for Developers",
+	"version": "0.1.0",
+	"publisher": "DevTime",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nikochiko/devtime-vscode.git"
+	},
 	"engines": {
 		"vscode": "^1.46.0"
 	},
