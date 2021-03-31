@@ -91,8 +91,11 @@ export class Devtime {
     });
 
     if (value === undefined) {
+      vscode.window.showErrorMessage("DevTime isn't logged in. Press ctrl+shift+P and search for 'Devtime: Login' command to start tracking code-time metrics.");
       return false;
     } else {
+      // TODO: get a message from server on whether this api key is valid
+      vscode.window.showInformationMessage("Logged into DevTime!");
       this.setApiKey(value);
       return true;
     }

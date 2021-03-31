@@ -15,26 +15,27 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(ping);
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("devtime.login", devtime.login)
+    vscode.commands.registerCommand("devtime.login", devtime.login, devtime)
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("devtime.showConfig", devtime.showConfig)
+    vscode.commands.registerCommand("devtime.showConfig", devtime.showConfig, devtime)
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("devtime.resetConfig", devtime.resetConfig)
+    vscode.commands.registerCommand("devtime.resetConfig", devtime.resetConfig, devtime)
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("devtime.setup", devtime.initialize)
+    vscode.commands.registerCommand("devtime.setup", devtime.initialize, devtime)
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "devtime.configureApiUrl",
-      devtime.configureApiUrl
-    )
+      devtime.configureApiUrl,
+      devtime
+    ),
   );
 }
 
