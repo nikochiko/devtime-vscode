@@ -7,6 +7,9 @@ import {
   isAuthenticated,
   sendHeartbeat,
   writeConfig,
+  pollAuthToken,
+  generateToken,
+  getLoginUrl
 } from "./helpers";
 
 interface Config {
@@ -14,6 +17,7 @@ interface Config {
   apiUrl: string;
   client: string;
   heartbeatDuration: number; // in milliseconds
+  hyperlogUrl: string;
 }
 
 export class Devtime {
@@ -82,22 +86,28 @@ export class Devtime {
 
   // this handles the part of adding the api-key to our config file
   async login(): Promise<boolean> {
-    // For now let's just take API key from a prompt
-    // but in the future we want this flow to be easier. Better UX
-
-    const value = await vscode.window.showInputBox({
-      prompt:
-        "Type in your DevTime API key... (You can copy/paste it from https://devtime.tech/profile)",
+    const token = generateToken();
+    console.log(`Generated token: ${token}`);
+    const loginUrl = getLoginUrl(token);
+    const message = `Opening browser. Please confirm your DevTime login with Hyperlog`;
+  
+    vscode.env.openExternal(vscode.Uri.parse(loginUrl)).then(value => {
+      if (value) {
+        vscode.window.showInformationMessage(message);
+      } else {
+        vscode.window.showErrorMessage(`Unable to open browser window. Please go to ${loginUrl} and confirm your login`);
+      }
     });
+    const response = await pollAuthToken(token);
 
-    if (value === undefined) {
-      vscode.window.showErrorMessage("DevTime isn't logged in. Press ctrl+shift+P and search for 'Devtime: Login' command to start tracking code-time metrics.");
-      return false;
-    } else {
-      // TODO: get a message from server on whether this api key is valid
+    if (response.ok === true) {
+      const { apiKey } = response;
       vscode.window.showInformationMessage("Logged into DevTime!");
-      this.setApiKey(value);
+      this.setApiKey(apiKey);
       return true;
+    } else {
+      vscode.window.showErrorMessage(response.message);
+      return false;
     }
   }
 
