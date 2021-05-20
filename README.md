@@ -29,3 +29,7 @@ Here: https://devtime.tech
 ### 0.1.0
 
 Initial push with capability for code-time metrics
+
+### 0.2.0
+
+Add integration with Hyperlog
