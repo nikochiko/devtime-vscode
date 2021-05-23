@@ -30,6 +30,10 @@
 				"title": "Devtime: Login"
 			},
 			{
+				"command": "devtime.logout",
+				"title": "Devtime: Logout"
+			},
+			{
 				"command": "devtime.showConfig",
 				"title": "Devtime: Show configuration file"
 			},

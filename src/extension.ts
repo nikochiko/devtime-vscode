@@ -31,6 +31,10 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
+    vscode.commands.registerCommand("devtime.logout", devtime.logout, devtime)
+  );
+
+  context.subscriptions.push(
     vscode.commands.registerCommand(
       "devtime.configureApiUrl",
       devtime.configureApiUrl,

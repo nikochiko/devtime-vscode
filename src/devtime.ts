@@ -13,11 +13,11 @@ import {
 } from "./helpers";
 
 interface Config {
-  apiKey: string;
   apiUrl: string;
-  client: string;
-  heartbeatDuration: number; // in milliseconds
   hyperlogUrl: string;
+  client: string;
+  apiKey?: string;
+  heartbeatDuration?: number; // in milliseconds
 }
 
 export class Devtime {
@@ -111,6 +111,13 @@ export class Devtime {
     }
   }
 
+  async logout(): Promise<void> {
+    delete this.config.apiKey;
+    writeConfig(this.config);
+
+    vscode.window.showInformationMessage("Logout Successful!");
+  }
+
   showConfig(): void {
     let configFp = getConfigFilePath();
     vscode.window.showTextDocument(vscode.Uri.file(configFp));
@@ -118,7 +125,7 @@ export class Devtime {
 
   resetConfig(): void {
     deleteConfig(); // deletes config file
-    getConfig(); // recreates config file with default value
+    this.config = getConfig() as Config; // recreates config file with default value
 
     vscode.window.showInformationMessage(
       "DevTime: Configuration has been reset to default!"

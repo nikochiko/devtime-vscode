@@ -129,7 +129,7 @@ export async function pollAuthToken(token: string): Promise<Record<string, any>>
     }
   }
 
-  return { ok: false, message: "Login timed out after 2 minute" };
+  return { ok: false, message: "Login timed out after 2 minutes" };
 }  
 
 function sleep(ms: number) {
