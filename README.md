@@ -33,3 +33,8 @@ Initial push with capability for code-time metrics
 ### 0.2.0
 
 Add integration with Hyperlog
+
+
+### 0.2.1
+
+Bug fixes
